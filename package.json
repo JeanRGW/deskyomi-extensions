@@ -1,0 +1,19 @@
+{
+    "name": "deskyomi-extensions",
+    "version": "0.0.1",
+    "main": "dist/index.js",
+    "author": "JeanRGW",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/JeanRGW/deskyomi-extensions"
+    },
+    "license": "ISC",
+    "description": "",
+    "devDependencies": {
+        "@types/node": "^22.10.10",
+        "typescript": "^5.7.3"
+    },
+    "dependencies": {
+        "cheerio": "^1.0.0"
+    }
+}
