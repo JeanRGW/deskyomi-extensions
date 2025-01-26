@@ -1,12 +1,12 @@
 import { AnimeEntry, EpisodeEntry, Extension } from "./types/extension.js";
 import * as cheerio from "cheerio";
 
-class AnimeFire implements Extension {
-    baseUrl = "https://animefire.plus/";
-    name = "Anime Fire";
-    version = "1.0.0";
+const AnimeFire = {
+    baseUrl: "https://animefire.plus/",
+    name: "Anime Fire",
+    version: "1.0.0",
 
-    async getAnimes(page: number): Promise<AnimeEntry[]> {
+    getAnimes: async function (page: number) {
         const resp = await fetch(this.baseUrl);
         const html = await resp.text();
 
@@ -14,11 +14,11 @@ class AnimeFire implements Extension {
 
         const items = doc(".owl-carousel-home").children();
 
-        const animes: AnimeEntry[] = items
+        const animes = items
             .map((i, el) => {
-                const $el = cheerio.load(el); // Load the current element to use cheerio methods
+                const $el = cheerio.load(el);
 
-                const anime: AnimeEntry = {
+                const anime = {
                     name: $el(".animeTitle").text() || "Not Found",
                     coverLink: $el("img").attr("data-src") || null,
                     link: $el("a").attr("href") || "google.com",
@@ -29,16 +29,16 @@ class AnimeFire implements Extension {
             .get();
 
         return animes;
-    }
+    },
 
-    async getEpisodes(link: string): Promise<EpisodeEntry[]> {
+    getEpisodes: async function (link: string) {
         const resp = await fetch(link);
         const html = await resp.text();
 
         const $ = cheerio.load(html);
         const list = $(".div_video_list").children();
 
-        const eps: EpisodeEntry[] = list
+        const eps = list
             .map((i, el) => {
                 const $el = cheerio.load(el);
 
@@ -51,9 +51,9 @@ class AnimeFire implements Extension {
             .get();
 
         return eps;
-    }
+    },
 
-    async getEpisode(link: string): Promise<string> {
+    getEpisode: async function (link: string) {
         const resp = await fetch(link);
         const html = await resp.text();
 
@@ -61,11 +61,11 @@ class AnimeFire implements Extension {
 
         const qLinks = $("#my-video").attr("data-video-src") as string;
         const qJson = await (await fetch(qLinks)).json();
-        const qualities: [] = qJson.data;
+        const qualities = qJson.data;
         return qualities[qualities.length - 1]["src"];
-    }
+    },
 
-    async search(str: string, index: number): Promise<AnimeEntry[]> {
+    search: async function (str: string, index: number) {
         const link =
             "https://animefire.plus/pesquisar/" +
             str.toLowerCase().replace(/\s+/g, "-") +
@@ -77,7 +77,7 @@ class AnimeFire implements Extension {
 
         const $ = cheerio.load(html)("div.ml-1");
 
-        const animes: AnimeEntry[] = $.children()
+        const animes = $.children()
             .map((i, el) => {
                 const $el = cheerio.load(el);
 
@@ -90,7 +90,7 @@ class AnimeFire implements Extension {
             .get();
 
         return animes;
-    }
-}
+    },
+};
 
 export { AnimeFire };

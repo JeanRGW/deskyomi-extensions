@@ -44,13 +44,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AnimeFire = void 0;
 const cheerio = __importStar(require("cheerio"));
-class AnimeFire {
-    constructor() {
-        this.baseUrl = "https://animefire.plus/";
-        this.name = "Anime Fire";
-        this.version = "1.0.0";
-    }
-    getAnimes(page) {
+const AnimeFire = {
+    baseUrl: "https://animefire.plus/",
+    name: "Anime Fire",
+    version: "1.0.0",
+    getAnimes: function (page) {
         return __awaiter(this, void 0, void 0, function* () {
             const resp = yield fetch(this.baseUrl);
             const html = yield resp.text();
@@ -58,7 +56,7 @@ class AnimeFire {
             const items = doc(".owl-carousel-home").children();
             const animes = items
                 .map((i, el) => {
-                const $el = cheerio.load(el); // Load the current element to use cheerio methods
+                const $el = cheerio.load(el);
                 const anime = {
                     name: $el(".animeTitle").text() || "Not Found",
                     coverLink: $el("img").attr("data-src") || null,
@@ -69,8 +67,8 @@ class AnimeFire {
                 .get();
             return animes;
         });
-    }
-    getEpisodes(link) {
+    },
+    getEpisodes: function (link) {
         return __awaiter(this, void 0, void 0, function* () {
             const resp = yield fetch(link);
             const html = yield resp.text();
@@ -88,8 +86,8 @@ class AnimeFire {
                 .get();
             return eps;
         });
-    }
-    getEpisode(link) {
+    },
+    getEpisode: function (link) {
         return __awaiter(this, void 0, void 0, function* () {
             const resp = yield fetch(link);
             const html = yield resp.text();
@@ -99,8 +97,8 @@ class AnimeFire {
             const qualities = qJson.data;
             return qualities[qualities.length - 1]["src"];
         });
-    }
-    search(str, index) {
+    },
+    search: function (str, index) {
         return __awaiter(this, void 0, void 0, function* () {
             const link = "https://animefire.plus/pesquisar/" +
                 str.toLowerCase().replace(/\s+/g, "-") +
@@ -121,6 +119,6 @@ class AnimeFire {
                 .get();
             return animes;
         });
-    }
-}
+    },
+};
 exports.AnimeFire = AnimeFire;
